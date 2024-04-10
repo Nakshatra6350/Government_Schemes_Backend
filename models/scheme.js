@@ -9,6 +9,7 @@ const schemeSchema = new Schema({
     default: Date.now,
   },
   imageURL: { type: String, required: true },
+  category: { type: String, required: true },
 });
 
 module.exports = mongoose.model("Scheme", schemeSchema);

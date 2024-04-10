@@ -1,3 +1,4 @@
+const { generateAdminToken } = require("../middleware/auth.js");
 const user = require("../models/user.js");
 const bcrypt = require("bcryptjs");
 const signup = async (req, res) => {
@@ -47,7 +48,16 @@ const login = async (req, res) => {
     if (!validPassword) {
       return res.status(401).json({ message: "Invalid password" });
     }
-    res.status(200).json({ message: "Login successful", body: isUser });
+    const payload = {
+      username: isUser.username,
+      password: isUser.password,
+    };
+    const token = generateAdminToken(payload);
+    res.setHeader("token", token);
+    console.log("User Token", token);
+    res
+      .status(200)
+      .json({ message: "Login successful", body: isUser, token: token });
   } catch (error) {
     console.log("Error in user login", error);
     return res.status(500).json({ message: "Internal server error" });

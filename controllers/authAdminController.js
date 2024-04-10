@@ -55,6 +55,7 @@ const login = async (req, res) => {
     const token = generateAdminToken(payload);
     res.setHeader("token", token);
     console.log("Admin Token", token);
+
     return res.status(200).json({ message: "Login successful", token: token });
   } catch (error) {
     console.log("Error in admin login", error);

@@ -10,21 +10,25 @@ const cookieParser = require("cookie-parser");
 dotenv.config();
 const app = express();
 app.use(cookieParser());
+
+// Configure CORS
 const corsOptions = {
   origin: "http://localhost:5000", // Allow requests from this origin
   methods: "GET,POST,PUT,DELETE", // Allow these HTTP methods
   allowedHeaders: "Content-Type,Authorization,Token,Cookies", // Allow all headers
   credentials: true,
 };
-
-// Enable CORS with the specified options
 app.use(cors(corsOptions));
+
+// Generate a random secret key
+
 app.use(express.json());
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/admin", adminRoute);
 app.use("/user", userRoute);
 app.use("/api", schemeRoute);
+
 const runApp = async () => {
   try {
     await connect(process.env.MONGO_URI, {

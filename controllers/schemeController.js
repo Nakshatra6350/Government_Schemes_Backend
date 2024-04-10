@@ -2,7 +2,8 @@ const scheme = require("../models/scheme");
 
 const createScheme = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, category } = req.body;
+    console.log(category);
     const isScheme = await scheme.findOne({ title: title });
     if (isScheme) {
       return res.status(404).json({ message: "Scheme already exists" });
@@ -12,6 +13,7 @@ const createScheme = async (req, res) => {
       title: title,
       description: description,
       imageURL: imageURL,
+      category: category,
     });
     await newScheme.save();
     return res.status(200).json({ message: "Scheme created successfully" });
