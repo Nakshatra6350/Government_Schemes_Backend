@@ -1,5 +1,6 @@
 const scheme = require("../models/scheme");
-
+const user = require("../models/user.js");
+const sendEmail = require("../utils/emailService.js");
 const createScheme = async (req, res) => {
   try {
     const { title, description, category } = req.body;
@@ -16,6 +17,16 @@ const createScheme = async (req, res) => {
       category: category,
     });
     await newScheme.save();
+    const users = await user.find({}, "email");
+    const emails = users.map((user) => user.email);
+    console.log("Sending emails to:", emails);
+    emails.forEach((email) => {
+      sendEmail(
+        email,
+        "New Scheme Released by government",
+        `A new scheme ${newScheme.title} has been issued by government of india. \nPlease check more details on our website sabkaSath.com`
+      );
+    });
     return res.status(200).json({ message: "Scheme created successfully" });
   } catch (error) {
     console.log("Error in scheme controller : ", error);
